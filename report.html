@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vendor Questionnaire Report — 2026-07-09</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ECEAE3; --panel:#E2DFD5; --ink:#1C2430; --ink-dim:#535C68;
+    --ink-faint:#7C8490; --hairline:#C9C4B7; --accent:#6E2A2A;
+    --accent-dim:rgba(110,42,42,0.1); --pass:#4F7A5E; --pass-bg:rgba(79,122,94,0.12);
+    --gap:#6E2A2A; --gap-bg:rgba(110,42,42,0.10);
+    --sans:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace; --serif:'Newsreader',Georgia,serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);text-decoration:none;}
+
+  /* header */
+  .page-header{background:var(--ink);color:var(--bg);padding:32px 44px;}
+  .page-header .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(236,234,227,0.5);margin-bottom:8px;}
+  .page-header h1{font-family:var(--serif);font-size:28px;font-weight:500;margin:0 0 6px;}
+  .page-header .meta{font-family:var(--mono);font-size:12px;color:rgba(236,234,227,0.6);}
+
+  /* stat bar */
+  .stat-bar{display:flex;gap:0;border-bottom:1px solid var(--hairline);}
+  .stat{flex:1;padding:24px 32px;border-right:1px solid var(--hairline);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:var(--serif);font-size:36px;color:var(--ink);line-height:1;}
+  .stat .label{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:4px;}
+  .stat.accent .num{color:var(--accent);}
+  .stat.pass .num{color:var(--pass);}
+
+  /* progress bar */
+  .progress-wrap{padding:20px 32px;border-bottom:1px solid var(--hairline);display:flex;align-items:center;gap:16px;}
+  .progress-track{flex:1;height:6px;background:var(--hairline);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--pass);border-radius:3px;transition:width 1s ease;}
+  .progress-label{font-family:var(--mono);font-size:12px;color:var(--ink-dim);white-space:nowrap;}
+
+  /* layout */
+  .body-wrap{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 200px);}
+  .sidebar{background:var(--panel);border-right:1px solid var(--hairline);padding:28px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;}
+  .sidebar .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px;display:block;}
+  .cat-link{display:block;font-family:var(--mono);font-size:12px;color:var(--ink-dim);padding:7px 10px;border-left:2px solid transparent;border-radius:0 2px 2px 0;margin-bottom:2px;transition:all .15s;}
+  .cat-link:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim);}
+  .sidebar-gap{margin-top:24px;padding-top:18px;border-top:1px solid var(--hairline);}
+  .gap-count{font-family:var(--mono);font-size:12px;color:var(--gap);padding:8px 10px;background:var(--gap-bg);border-radius:2px;}
+
+  /* main content */
+  .content{padding:36px 40px;overflow-x:auto;}
+  .section-head{margin-bottom:20px;}
+  .section-head h2{font-family:var(--serif);font-size:22px;font-weight:500;margin:0 0 4px;}
+  .section-head p{color:var(--ink-dim);font-size:13px;margin:0;}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:48px;}
+  thead th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);padding:0 12px 12px;border-bottom:2px solid var(--hairline);white-space:nowrap;}
+  tbody tr{border-bottom:1px solid var(--hairline);transition:background .1s;}
+  tbody tr:hover{background:var(--panel);}
+  tbody tr.row-gap{background:rgba(110,42,42,0.04);}
+  tbody tr.row-gap:hover{background:rgba(110,42,42,0.08);}
+  td{padding:14px 12px;vertical-align:top;}
+  td.qid{font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap;}
+  td.cat{font-family:var(--mono);font-size:11px;color:var(--ink-dim);white-space:nowrap;}
+  td.question{font-weight:500;max-width:260px;}
+  td.detail{color:var(--ink-dim);max-width:280px;font-size:12.5px;}
+  td.evidence{font-family:var(--mono);font-size:11px;color:var(--ink-dim);max-width:180px;}
+  td.answer{font-family:var(--mono);font-size:12px;font-weight:500;}
+  .na{color:var(--ink-faint);}
+
+  /* badges */
+  .badge{font-family:var(--mono);font-size:10px;letter-spacing:0.04em;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap;}
+  .badge.answered{color:var(--pass);background:var(--pass-bg);}
+  .badge.gap{color:var(--gap);background:var(--gap-bg);}
+  .conf{font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:2px;}
+  .conf-high{color:#4F7A5E;background:rgba(79,122,94,0.12);}
+  .conf-med{color:#8A6A2A;background:rgba(138,106,42,0.12);}
+  .conf-low{color:#6E2A2A;background:rgba(110,42,42,0.12);}
+  .conf-na{color:var(--ink-faint);background:transparent;}
+
+  /* gap summary table */
+  .gap-section{background:var(--gap-bg);border:1px solid rgba(110,42,42,0.2);border-radius:2px;padding:24px 28px;margin-bottom:48px;}
+  .gap-section h2{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--gap);margin:0 0 16px;}
+
+  /* footer */
+  .report-footer{border-top:1px solid var(--hairline);padding:20px 40px;font-family:var(--mono);font-size:11px;color:var(--ink-faint);display:flex;justify-content:space-between;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Vendor Security Review — Auto-Generated</div>
+  <h1>Vendor Questionnaire Response Report</h1>
+  <div class="meta">Generated: 2026-07-09 &nbsp;·&nbsp; Source: vendor_questionnaire.csv &nbsp;·&nbsp; Baseline: control_baseline.csv</div>
+</div>
+
+<div class="stat-bar">
+  <div class="stat"><div class="num">25</div><div class="label">Total Questions</div></div>
+  <div class="stat pass"><div class="num">25</div><div class="label">Auto-Answered</div></div>
+  <div class="stat accent"><div class="num">0</div><div class="label">Gaps Flagged</div></div>
+  <div class="stat"><div class="num">100%</div><div class="label">Automation Rate</div></div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+  <div class="progress-label">25 of 25 questions answered automatically</div>
+</div>
+
+<div class="body-wrap">
+  <div class="sidebar">
+    <span class="eyebrow">Categories</span>
+    <a href="#cat-DataEncryption" class="cat-link">Data Encryption</a><a href="#cat-AccessControl" class="cat-link">Access Control</a><a href="#cat-IncidentResponse" class="cat-link">Incident Response</a><a href="#cat-VulnerabilityManagement" class="cat-link">Vulnerability Management</a><a href="#cat-Third-PartyRisk" class="cat-link">Third-Party Risk</a><a href="#cat-DataPrivacy" class="cat-link">Data Privacy</a><a href="#cat-BusinessContinuity" class="cat-link">Business Continuity</a><a href="#cat-SecurityAwareness" class="cat-link">Security Awareness</a><a href="#cat-AuditandCompliance" class="cat-link">Audit and Compliance</a><a href="#cat-AIandEmergingTech" class="cat-link">AI and Emerging Tech</a>
+    <div class="sidebar-gap">
+      <div class="gap-count">0 gap(s) need review</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    
+
+    <div class="section-head">
+      <h2>Full Response Table</h2>
+      <p>All questions with auto-generated responses and source control references. Rows highlighted in red require manual completion.</p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Category</th><th>Question</th><th>Status</th>
+          <th>Answer</th><th>Response Detail</th><th>Evidence</th>
+          <th>Owner</th><th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="">
+          <td class="qid">VQ-001</td>
+          <td class="cat">Data Encryption</td>
+          <td class="question">Does your organization encrypt data at rest using AES-256 or equivalent?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">All data at rest is encrypted using AES-256 via our cloud provider's native encryption services.</td>
+          <td class="evidence">AWS KMS encryption policy documentation</td>
+          <td>Security Engineering</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-002</td>
+          <td class="cat">Data Encryption</td>
+          <td class="question">Does your organization encrypt data in transit using TLS 1.2 or higher?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">All data in transit is encrypted using TLS 1.2 or higher. TLS 1.0 and 1.1 are disabled across all endpoints.</td>
+          <td class="evidence">Network security configuration baseline</td>
+          <td>Security Engineering</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-003</td>
+          <td class="cat">Access Control</td>
+          <td class="question">Does your organization enforce multi-factor authentication (MFA) for all users?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">MFA is enforced for all users accessing production systems and corporate applications via Okta.</td>
+          <td class="evidence">Okta MFA policy documentation</td>
+          <td>IT / IAM</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-004</td>
+          <td class="cat">Access Control</td>
+          <td class="question">Does your organization follow the principle of least privilege for access management?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">Access is granted on a least-privilege basis. Role-based access control (RBAC) is enforced across all systems.</td>
+          <td class="evidence">IAM policy documentation</td>
+          <td>IT / IAM</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-005</td>
+          <td class="cat">Access Control</td>
+          <td class="question">Does your organization conduct periodic access reviews?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">Access reviews are conducted quarterly for all production systems and annually for lower-risk systems.</td>
+          <td class="evidence">Quarterly access review reports</td>
+          <td>IT / IAM</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-006</td>
+          <td class="cat">Incident Response</td>
+          <td class="question">Does your organization have a documented incident response plan?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">A documented incident response plan is maintained and reviewed annually. The plan covers detection containment eradication recovery and post-incident review.</td>
+          <td class="evidence">IRP v3.2 (internal)</td>
+          <td>Security / Compliance</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-007</td>
+          <td class="cat">Incident Response</td>
+          <td class="question">What is your organization's target RTO (Recovery Time Objective)?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">Our target RTO is 4 hours for Tier 1 systems and 24 hours for Tier 2 systems.</td>
+          <td class="evidence">BCP / DR documentation</td>
+          <td>IT / Security</td>
+          <td><span class="conf conf-med">Medium</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-008</td>
+          <td class="cat">Incident Response</td>
+          <td class="question">Does your organization conduct annual incident response tabletop exercises?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">Tabletop exercises are conducted annually and include cross-functional participation from Legal Privacy and Engineering.</td>
+          <td class="evidence">2025 tabletop exercise summary</td>
+          <td>Security / Compliance</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-009</td>
+          <td class="cat">Vulnerability Management</td>
+          <td class="question">Does your organization perform regular vulnerability scans?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">Automated vulnerability scans are conducted weekly on all production systems using industry-standard tooling.</td>
+          <td class="evidence">Vulnerability scan schedule and reports</td>
+          <td>Security Engineering</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-010</td>
+          <td class="cat">Vulnerability Management</td>
+          <td class="question">Does your organization have a defined patch management policy?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">A patch management policy requires critical patches to be applied within 15 days and high patches within 30 days.</td>
+          <td class="evidence">Patch management policy v2.1</td>
+          <td>IT / Security</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-011</td>
+          <td class="cat">Vulnerability Management</td>
+          <td class="question">Does your organization conduct annual penetration testing?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">Annual penetration testing is conducted by a qualified third-party firm. Findings are tracked to remediation.</td>
+          <td class="evidence">2025 penetration test report (available under NDA)</td>
+          <td>Security Engineering</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-012</td>
+          <td class="cat">Third-Party Risk</td>
+          <td class="question">Does your organization assess the security posture of third-party vendors?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">All third-party vendors with access to sensitive data undergo a security assessment prior to onboarding and annually thereafter.</td>
+          <td class="evidence">Vendor risk assessment program documentation</td>
+          <td>Procurement / Security</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-013</td>
+          <td class="cat">Third-Party Risk</td>
+          <td class="question">Does your organization require vendors to adhere to a security policy?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">All vendors are required to adhere to our Third-Party Security Policy as a condition of contract.</td>
+          <td class="evidence">Third-Party Security Policy v1.4</td>
+          <td>Procurement / Legal</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-014</td>
+          <td class="cat">Data Privacy</td>
+          <td class="question">Does your organization have a documented privacy policy?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">A publicly available privacy policy is maintained and reviewed annually. It covers data collection use retention and individual rights.</td>
+          <td class="evidence">Privacy Policy (public)</td>
+          <td>Privacy / Legal</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-015</td>
+          <td class="cat">Data Privacy</td>
+          <td class="question">Does your organization conduct Data Protection Impact Assessments (DPIAs)?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">DPIAs are conducted for all high-risk processing activities involving personal data including new product launches and significant system changes.</td>
+          <td class="evidence">DPIA template and completed assessments</td>
+          <td>Privacy</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-016</td>
+          <td class="cat">Data Privacy</td>
+          <td class="question">Is your organization compliant with GDPR?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">We are GDPR compliant. Our privacy program includes lawful basis documentation data subject rights processes and a DPA for relevant vendors.</td>
+          <td class="evidence">GDPR compliance documentation</td>
+          <td>Privacy / Legal</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-017</td>
+          <td class="cat">Data Privacy</td>
+          <td class="question">Is your organization compliant with CCPA?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">We are compliant with CCPA and CPRA. We support consumer rights requests and have updated our privacy notice accordingly.</td>
+          <td class="evidence">CCPA compliance documentation</td>
+          <td>Privacy / Legal</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-018</td>
+          <td class="cat">Business Continuity</td>
+          <td class="question">Does your organization have a documented business continuity plan (BCP)?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">A documented BCP is maintained covering people process and technology. It is reviewed and updated annually.</td>
+          <td class="evidence">BCP v2.0 (internal)</td>
+          <td>IT / Security</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-019</td>
+          <td class="cat">Business Continuity</td>
+          <td class="question">Does your organization test its BCP at least annually?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">The BCP is tested annually via tabletop exercise and failover testing for Tier 1 systems.</td>
+          <td class="evidence">BCP test results 2025</td>
+          <td>IT / Security</td>
+          <td><span class="conf conf-med">Medium</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-020</td>
+          <td class="cat">Security Awareness</td>
+          <td class="question">Does your organization provide security awareness training to all employees?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">All employees complete security awareness training at onboarding and annually thereafter. Phishing simulations are conducted quarterly.</td>
+          <td class="evidence">LMS training completion reports</td>
+          <td>HR / Security</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-021</td>
+          <td class="cat">Security Awareness</td>
+          <td class="question">How frequently is security awareness training conducted?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">All employees complete security awareness training at onboarding and annually thereafter. Phishing simulations are conducted quarterly.</td>
+          <td class="evidence">LMS training completion reports</td>
+          <td>HR / Security</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-022</td>
+          <td class="cat">Audit and Compliance</td>
+          <td class="question">Does your organization hold a SOC 2 Type II certification?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">We hold a current SOC 2 Type II certification. The report is available under NDA upon request.</td>
+          <td class="evidence">SOC 2 Type II report (available under NDA)</td>
+          <td>Compliance</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-023</td>
+          <td class="cat">Audit and Compliance</td>
+          <td class="question">Does your organization hold an ISO 27001 certification?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">No</td>
+          <td class="detail">We do not currently hold ISO 27001 certification. Our security program is aligned with ISO 27001 controls and we are evaluating certification in 2027.</td>
+          <td class="evidence">N/A</td>
+          <td>Compliance</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-024</td>
+          <td class="cat">Audit and Compliance</td>
+          <td class="question">Has your organization had any security breaches in the past 24 months?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">No</td>
+          <td class="detail">We have not experienced a reportable security breach in the past 24 months.</td>
+          <td class="evidence">Incident log (available under NDA)</td>
+          <td>Security / Compliance</td>
+          <td><span class="conf conf-high">High</span></td>
+        </tr>
+        <tr class="">
+          <td class="qid">VQ-025</td>
+          <td class="cat">AI and Emerging Tech</td>
+          <td class="question">Does your organization have a policy governing the use of AI/ML systems?</td>
+          <td><span class="badge answered">Auto-Answered</span></td>
+          <td class="answer">Yes</td>
+          <td class="detail">We maintain an AI Acceptable Use Policy governing the deployment and use of AI/ML systems. The policy is reviewed annually and aligned with the NIST AI RMF.</td>
+          <td class="evidence">AI Acceptable Use Policy v1.0</td>
+          <td>Privacy / Compliance</td>
+          <td><span class="conf conf-med">Medium</span></td>
+        </tr></tbody>
+    </table>
+
+  </div>
+</div>
+
+<div class="report-footer">
+  <span>DOCUMENT CONTROL — Classification: Confidential · For internal review only</span>
+  <span>Generated by automate_questionnaire.py · 2026-07-09</span>
+</div>
+
+</body>
+</html>
