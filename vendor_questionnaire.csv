@@ -1,0 +1,26 @@
+question_id,category,question,response_required
+VQ-001,Data Encryption,Does your organization encrypt data at rest using AES-256 or equivalent?,Yes
+VQ-002,Data Encryption,Does your organization encrypt data in transit using TLS 1.2 or higher?,Yes
+VQ-003,Access Control,Does your organization enforce multi-factor authentication (MFA) for all users?,Yes
+VQ-004,Access Control,Does your organization follow the principle of least privilege for access management?,Yes
+VQ-005,Access Control,Does your organization conduct periodic access reviews?,Yes
+VQ-006,Incident Response,Does your organization have a documented incident response plan?,Yes
+VQ-007,Incident Response,What is your organization's target RTO (Recovery Time Objective)?,Yes
+VQ-008,Incident Response,Does your organization conduct annual incident response tabletop exercises?,Yes
+VQ-009,Vulnerability Management,Does your organization perform regular vulnerability scans?,Yes
+VQ-010,Vulnerability Management,Does your organization have a defined patch management policy?,Yes
+VQ-011,Vulnerability Management,Does your organization conduct annual penetration testing?,Yes
+VQ-012,Third-Party Risk,Does your organization assess the security posture of third-party vendors?,Yes
+VQ-013,Third-Party Risk,Does your organization require vendors to adhere to a security policy?,Yes
+VQ-014,Data Privacy,Does your organization have a documented privacy policy?,Yes
+VQ-015,Data Privacy,Does your organization conduct Data Protection Impact Assessments (DPIAs)?,Yes
+VQ-016,Data Privacy,Is your organization compliant with GDPR?,Yes
+VQ-017,Data Privacy,Is your organization compliant with CCPA?,Yes
+VQ-018,Business Continuity,Does your organization have a documented business continuity plan (BCP)?,Yes
+VQ-019,Business Continuity,Does your organization test its BCP at least annually?,Yes
+VQ-020,Security Awareness,Does your organization provide security awareness training to all employees?,Yes
+VQ-021,Security Awareness,How frequently is security awareness training conducted?,Yes
+VQ-022,Audit and Compliance,Does your organization hold a SOC 2 Type II certification?,Yes
+VQ-023,Audit and Compliance,Does your organization hold an ISO 27001 certification?,Yes
+VQ-024,Audit and Compliance,Has your organization had any security breaches in the past 24 months?,Yes
+VQ-025,AI and Emerging Tech,Does your organization have a policy governing the use of AI/ML systems?,Yes
