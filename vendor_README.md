@@ -140,4 +140,4 @@ The report is self-contained (single HTML file) and can be shared directly with 
 
 **Joseph Lee** — GRC & Privacy Program Manager  
 CIPP/US · CIPP/E · AWS Cloud Practitioner · OneTrust Certified  
-[LinkedIn](https://linkedin.com/in/[your-handle]) · [Portfolio](https://joe-lee10.github.io)
+[LinkedIn](https://www.linkedin.com/in/joelee19/) · [Portfolio](https://joe-lee10.github.io)
